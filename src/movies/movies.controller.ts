@@ -1,11 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { MoviesService } from './movies.service';
 
 @Controller('movies')
 export class MoviesController {
-    
+    constructor(private readonly moviesService: MoviesService){}
+
     @Get()
     getAll(){
-        return 'This will return all movies';
+        return this.moviesService.getAll();
     }
 
     @Get('search') //:id 밑에 있으면 nest가 search를 id값으로 인식
@@ -14,18 +16,18 @@ export class MoviesController {
     }
 
     @Get(':id')
-    getOnt(@Param("id")id){
-        return `This will return one movie with the id: ${id}`;
+    getOnt(@Param("id") movieId){
+        return this.moviesService.getOne(movieId);
     }
 
     @Post()
     create(@Body() movieData){
-        return movieData;
+        return this.moviesService.create(movieData);
     }
 
     @Delete(':id')
     remove(@Param('id') movieId){
-        return `This will delete a movie with the id: ${movieId}`;
+        return this.moviesService.deleteOne(movieId);
     }
 
     @Patch(':id') //리소스의 일부분만 업데이트
