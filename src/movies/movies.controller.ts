@@ -32,10 +32,7 @@ export class MoviesController {
 
     @Patch(':id') //리소스의 일부분만 업데이트
     path(@Param('id')movieId, @Body() updateData){
-        return {
-            updateedMovie: movieId,
-            ...updateData,
-        };
+        return this.moviesService.update(movieId, updateData);
     }
 
     
