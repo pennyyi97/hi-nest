@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { MoviesService } from './movies.service';
+import { CreateMovieDto } from './dto/create-movie.dto';
 
 @Controller('movies')
 export class MoviesController {
@@ -16,22 +17,24 @@ export class MoviesController {
     }
 
     @Get(':id')
-    getOnt(@Param("id") movieId){
+    getOnt(@Param("id") movieId:number){
+        console.log(typeof movieId);
         return this.moviesService.getOne(movieId);
     }
 
     @Post()
-    create(@Body() movieData){
+    create(@Body() movieData: CreateMovieDto){
+        movieData
         return this.moviesService.create(movieData);
     }
 
     @Delete(':id')
-    remove(@Param('id') movieId){
+    remove(@Param('id') movieId: number){
         return this.moviesService.deleteOne(movieId);
     }
 
     @Patch(':id') //리소스의 일부분만 업데이트
-    path(@Param('id')movieId, @Body() updateData){
+    path(@Param('id') movieId: number, @Body() updateData){
         return this.moviesService.update(movieId, updateData);
     }
 
