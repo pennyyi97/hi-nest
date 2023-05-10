@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
+import exp from 'constants';
+import { NotFoundException } from '@nestjs/common';
 
 describe('MoviesService', () => {
   let service: MoviesService;
@@ -15,8 +17,36 @@ describe('MoviesService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-  
-  it('should be 4', () => {
-    expect(2+3).toEqual(5)
+
+  describe("getAll", () => {
+    it('should return an array', () =>{
+      const result = service.getAll();
+      expect(result).toBeInstanceOf(Array); //getAll이 배열을 return 하는지 테스트
+    })
+  });
+
+  describe('getOne', () =>{
+    
+    it('should return a movie', ()=>{
+      service.create({
+        title: "Test Movie",
+        geners: ['test'],
+        year: 2000
+      });
+      const movie = service.getOne(1);
+
+      expect(movie).toBeDefined();
+      expect(movie.id).toEqual(1);
+    });
+
+    it('should throw 404 error', () =>{
+      try{
+        service.getOne(999); //앞에서 정의한 not found exception이 제대로 작동하는 지 확인
+      }catch(e){
+        expect(e).toBeInstanceOf(NotFoundException);
+        expect(e.message).toEqual('Movie with Id 999 not found.')
+      }
+    })
+
   })
 });
