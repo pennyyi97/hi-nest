@@ -19,6 +19,35 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect('Welcome to my Movie API');
   });
+
+  describe('/movies', () =>{
+    it('GET', () => {
+      return request(app.getHttpServer())
+        .get('/movies')
+        .expect(200)
+        .expect([]); 
+        //expected [ { id: 1 } ] response body, got [] 
+        //[]로 받았는데 [ { id: 1 } ]랑 같냐고 비교해서 에러 발생
+    });
+
+    it('POST', () =>{
+      return request(app.getHttpServer())
+        .post('/movies')
+        .send({
+          title:'Test',
+          year: 2000,
+          geners: ['test']
+        })
+        .expect(201);
+    });
+
+    it('DELETE', () => {
+      return request(app.getHttpServer())
+        .delete('/movies')
+        .expect(404);
+    })
+  });
+
 });
